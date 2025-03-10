@@ -1,100 +1,121 @@
+'use client'
 import Image from "next/image";
+import { useState, useEffect } from 'react';
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [email, setEmail] = useState('innsonictechnologies@gmail.com');
+  const [copied, setCopied] = useState(false);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(email);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  // For the animated gradient effect
+  const [gradientPos, setGradientPos] = useState(0);
+  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setGradientPos((prev) => (prev + 1) % 200);
+    }, 50);
+    
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-black text-white flex flex-col">
+      {/* Gradient accent at the top */}
+      <div 
+        className="h-1 w-full bg-gradient-to-r from-purple-600 via-blue-500 to-teal-400" 
+        style={{ 
+          backgroundSize: '200% 100%',
+          backgroundPosition: `${gradientPos}% 0%`
+        }}
+      />
+      
+      <div className="flex-1 flex flex-col items-center justify-center px-6 py-12">
+        <main className="w-full max-w-3xl mx-auto flex flex-col items-center space-y-12">
+          {/* Logo */}
+          <div className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-500 via-blue-500 to-teal-400">
+            INNSONIC
+          </div>
+          <div className="text-xl font-light tracking-wider text-gray-400">TECHNOLOGIES</div>
+          
+          {/* Status */}
+          <div className="flex items-center space-x-3 mt-4">
+            <div className="w-3 h-3 rounded-full bg-teal-400 animate-pulse"></div>
+            <div className="uppercase tracking-widest text-sm text-gray-400">Under Construction</div>
+          </div>
+          
+          {/* Description */}
+          <div className="text-center max-w-xl">
+            <h1 className="text-2xl md:text-3xl font-light mb-6">Building Something Amazing</h1>
+            <p className="text-gray-400 mb-8">
+              We're crafting innovative app and web solutions to transform your digital presence. 
+              Our team is working diligently to bring you a seamless experience.
+            </p>
+            <div className="w-16 h-1 mx-auto my-6 bg-gradient-to-r from-purple-500 to-blue-500"></div>
+            <p className="text-gray-300">
+              Have a project in mind? Let's discuss how we can help.
+            </p>
+          </div>
+          
+          {/* Contact */}
+          <div className="w-full max-w-md px-6 py-6 border border-gray-800 rounded-lg bg-gray-900/50 backdrop-blur-sm">
+            <div className="flex flex-col items-center space-y-4">
+              <div className="text-gray-400">Contact us</div>
+              <a 
+                className="flex items-center space-x-2 bg-gray-800 px-4 py-3 rounded-md w-full cursor-pointer hover:bg-gray-700 transition-colors"
+                href="mailto:innsonictechnologies@gmail.com"
+              >
+                <svg 
+                  xmlns="http://www.w3.org/2000/svg" 
+                  className="h-5 w-5 text-teal-400" 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                <span className="text-sm md:text-base flex-1 font-mono">{email}</span>
+                {/* <div className="text-xs text-teal-400">
+                  {copied ? "Copied!" : "Click to copy"}
+                </div> */}
+              </a>
+            </div>
+          </div>
+          
+          {/* Services */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+            <div className="p-6 border border-gray-800 rounded-lg bg-gray-900/30 backdrop-blur-sm">
+              <div className="text-teal-400 mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-medium mb-2">App Development</h3>
+              <p className="text-gray-400 text-sm">Custom mobile applications that elevate your business and engage your users.</p>
+            </div>
+            
+            <div className="p-6 border border-gray-800 rounded-lg bg-gray-900/30 backdrop-blur-sm">
+              <div className="text-blue-400 mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-medium mb-2">Web Services</h3>
+              <p className="text-gray-400 text-sm">Responsive websites and web applications built with modern technologies.</p>
+            </div>
+          </div>
+        </main>
+      </div>
+      
+      {/* Footer */}
+      <footer className="py-6 border-t border-gray-800">
+        <div className="text-center text-gray-500 text-sm">
+          &copy; {new Date().getFullYear()} Innsonic Technologies. All rights reserved.
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
       </footer>
     </div>
   );
